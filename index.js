@@ -49,18 +49,18 @@ app.post('/listado',(req,res)=>
 );
 
 // llamada a consultas. Ej nro de socio.
-app.get('/consultas/:nro',(req,res)=>
-{
-    const {nro} =req.params; //las llaves indican que solo tome el valor de nro del conjunto de datos sino imprime nro: '24'
-    if (isNaN(Number(nro))){
-        res.send('Estás en el sector de consultas - No escribiste número');
-    }else{
-        console.log(Number(nro));
-        res.send('Estás en el sector consultas - Dato correcto')
-    }
-
-    console.log(nro);
-    res.send('<b>Estas en el sector de consultas</b>')
+app.get('/consultas/:nro',(req,info)=>
+{ //consulta sin la validación de si es o no numérico
+    const {nro} = req.params;
+    const consultasql= `SELECT id,nombre,apellido,edad FROM personas WHERE id = ${nro}`; 
+    connection.query(consultasql, (error,resultados)=>{ 
+        if(error) throw error;
+        if(resultados.length > 0){ 
+            info.json(resultados); 
+        }else{
+            info.send('No se encontraron datos en la BD');
+        }
+    }); 
 }
 );
 
