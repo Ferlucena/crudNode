@@ -27,7 +27,7 @@ app.get('/',(req,res)=>
 
 // llamada al listado 
 app.get('/listado',(req,info)=>
-{ info.send('Estas en el sector listados - GET');
+{ //info.send('Estas en el sector listados - GET'); --> esta linea produce error se solapa con info.json
     const consultasql= 'SELECT * FROM personas ORDER BY edad DESC, apellido'; //ESTO ES UNA QUERY
                                                                              //la buena practica es traer el atributo o los atributos particulares que necesite y no *
     connection.query(consultasql, (error,resultados)=>{ //ejecuta la query con catch try, es decir se fija si da error o resultado
