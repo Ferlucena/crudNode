@@ -66,22 +66,51 @@ app.get('/consultas/:nro',(req,info)=>
 
 // Nuevo dato
 app.post('/nueva',(req,res)=>
-{
-    res.send('Alta de un dato');
+{   //Realizo un INSERT en la tabla sin saber que datos insertar
+    const sql = 'INSERT INTO personas SET ?';
+
+    // SET DE DATOS - Inserto nuevo dato en formato array pidiendo los datos al body mendiante JS
+    const nuevoDato = {
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        edad: req.body.edad,
+        provincia: req.body.provincia
+    }; 
+    
+    //Esta seccion es la que reemplaza '?' en const sql 
+    connection.query(sql, nuevoDato, error =>{ 
+        if(error) throw error;
+        res.send('Alta dada correctamente')
+    }
+    );
 }
 );
 
 // Elimintar dato
 app.delete('/borrar/:nro',(req,res)=>
-{
-    res.send('Eliminar de un dato');
+{ 
+    const {nro} = req.params;
+    const consultasql= `DELETE FROM personas WHERE id = ${nro}`; 
+    connection.query(consultasql, (error,resultados)=>{ 
+        if(error) throw error;
+        res.send('No encontré datos')
+    }
+    );
 }
 );
 
 // Modificar un dato
 app.put('/cambiar/:nro',(req,res)=>
-{
-    res.send('Modificar de un dato');
+{ 
+    const {nro} = req.params;
+    const {nombre,apellido} = req.body; //estos parametros no vienen cargado en la dire url lo implementaremos en el cuerpo de la solidictud del serv web
+                                       //req.body envio los datos desde el body con JS para reemplazar los datos
+    const consultasql= `UPDATE personas SET nombre = '${nombre}', apellido = '${apellido}' WHERE id = ${nro}`; 
+    connection.query(consultasql, (error,resultados)=>{ 
+        if(error) throw error;
+        res.send('Dato modificado correctamente')
+    }
+    );
 }
 );
 
