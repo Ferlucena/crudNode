@@ -1,10 +1,14 @@
 // Generacion de módulos
+// Instalo el modulo npm i cors para seguridad
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+//Determinacion del puerto a utilizar
 const PORT = process.env.PORT||3000; //determinación del puerto a utilizar
 //-----------------------
 const app = express();
+app.use(cors());
 //app.use(bodyParser.json()) // está obsoleto
 app.use(express.json()); 
 // Generacion de datos para la conexión
@@ -26,7 +30,7 @@ app.get('/',(req,res)=>
 );
 
 // llamada al listado 
-app.get('/listado',(req,info)=>
+app.get('/listados',cors(), (req,info)=> //cors es un middleware es un proceso entre el front y el back
 { //info.send('Estas en el sector listados - GET'); --> esta linea produce error se solapa con info.json
     const consultasql= 'SELECT * FROM personas ORDER BY edad DESC, apellido'; //ESTO ES UNA QUERY
                                                                              //la buena practica es traer el atributo o los atributos particulares que necesite y no *
