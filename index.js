@@ -32,7 +32,7 @@ app.get('/',(req,res)=>
 // llamada al listado 
 app.get('/listados',cors(), (req,info)=> //cors es un middleware es un proceso entre el front y el back
 { //info.send('Estas en el sector listados - GET'); --> esta linea produce error se solapa con info.json
-    const consultasql= 'SELECT * FROM personas ORDER BY edad DESC, apellido'; //ESTO ES UNA QUERY
+    const consultasql= 'SELECT id,nombre,apellido,edad FROM personas ORDER BY edad DESC, apellido'; //ESTO ES UNA QUERY
                                                                              //la buena practica es traer el atributo o los atributos particulares que necesite y no *
     connection.query(consultasql, (error,resultados)=>{ //ejecuta la query con catch try, es decir se fija si da error o resultado
         if(error) throw error;
@@ -74,7 +74,7 @@ app.post('/nueva',(req,res)=>
     const sql = 'INSERT INTO personas SET ?';
 
     // SET DE DATOS - Inserto nuevo dato en formato array pidiendo los datos al body mendiante JS
-    const nuevoDato = {
+    const nuevodato = {
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         edad: req.body.edad,
@@ -82,9 +82,10 @@ app.post('/nueva',(req,res)=>
     }; 
     
     //Esta seccion es la que reemplaza '?' en const sql 
-    connection.query(sql, nuevoDato, error =>{ 
+    connection.query(sql, nuevodato, error =>{ 
         if(error) throw error;
-        res.send('Alta dada correctamente')
+        res.send('Alta dada correctamente');
+        console.log("Update OK");
     }
     );
 }
